@@ -1,4 +1,4 @@
-# Вертска макета Shelter Rolling Scopes School stage 1.
+# Virtual keyboard task / Rolling Scopes School stage 1.
 
 **Ссылка на deploy**: 
 
