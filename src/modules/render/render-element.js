@@ -4,4 +4,4 @@ export default function renderElement(tag, classes) {
   return element;
 }
 
-//TODO сделать массив классов вместо одного
+// TODO сделать массив классов вместо одного

@@ -1,4 +1,4 @@
-import * as allKeys from './keys';
+import * as allKeys from '../keys';
 import * as renderElement from './render-element';
 import * as renderKey from './render-key';
 
