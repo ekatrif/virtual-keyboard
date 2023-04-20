@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  /* Браузер сначала попробует найти шрифт локально */
+  src: local("Lato"),
+       /* Если не получилось, загрузит woff2 */
+  url("./assets/fonts/Lato-Regular.woff2") format("woff2"),
+       /* Если браузер не поддерживает woff2, загрузит woff */
+  url("./assets/fonts/Lato-Regular.woff") format("woff"),
+  url("./assets/fonts/Lato-Regular.ttf") format("ttf");
+}

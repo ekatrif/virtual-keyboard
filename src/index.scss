@@ -1,1 +1,7 @@
-@import './styles/style';
+@import './styles/abstracts/variables';
+
+@import './styles/base/typography';
+
+@import './styles/base/common-styles';
+
+@import './styles/components/keyboard';

@@ -11,6 +11,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'import/extensions': 'always',
+    'linebreak-style': ['error', 'windows'],
+    // 'import/extensions': ['error', 'always'],
   },
 };

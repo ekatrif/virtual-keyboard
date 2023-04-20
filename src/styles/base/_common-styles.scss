@@ -1,0 +1,39 @@
+body {
+  margin:0;
+  background: $body-background;
+  font-family: 'Lato', sans-serif;
+}
+
+.hidden {
+  display:none;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $wrapper-color;
+  border-radius: 20px;
+
+  & > * + * {
+    margin-top: 20px;
+  }
+}
+
+.h1 {
+  font-size: 30px;
+  color: $title-color;
+}
+
+.textarea {
+  width:90%;
+  font-size: 24px;
+}
+
+.paragraph + .paragraph {
+  margin-top: 0;
+}
