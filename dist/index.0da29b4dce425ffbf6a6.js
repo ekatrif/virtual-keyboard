@@ -433,6 +433,86 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _keys__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./keys */ "./src/modules/keys.js");
 
+const isCapsActive = () => {
+  // Checks if caps is active
+  const caps = document.querySelector('.CapsLock');
+  return caps.classList.contains('key_active');
+};
+const isShiftActive = () => {
+  // Checks if shift is active
+  const shiftLeft = document.querySelector('.ShiftLeft');
+  const shiftRight = document.querySelector('.ShiftRight');
+  return shiftLeft.classList.contains('key_active') || shiftRight.classList.contains('key_active');
+};
+const capsShiftOn = () => {
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => {
+    const spans = key.querySelectorAll('span');
+    spans.forEach(span => {
+      // Make all spans hidden
+      if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
+        span.classList.add('hidden');
+      }
+      // Make active span with class 'shift-caps'
+      if (span.classList.contains('shift-caps')) {
+        span.classList.remove('hidden');
+      }
+    });
+  });
+};
+const shiftOn = () => {
+  if (isCapsActive()) {
+    capsShiftOn();
+  } else {
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => {
+      const spans = key.querySelectorAll('span');
+      spans.forEach(span => {
+        // Make all spans hidden
+        if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
+          span.classList.add('hidden');
+        }
+        // Make active span with class 'up'
+        if (span.classList.contains('up')) {
+          span.classList.remove('hidden');
+        }
+      });
+    });
+  }
+};
+const shiftOff = () => {
+  if (isCapsActive()) {
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => {
+      const spans = key.querySelectorAll('span');
+      spans.forEach(span => {
+        // Make all spans hidden
+        if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
+          span.classList.add('hidden');
+        }
+        // Make active span with class 'up'
+        if (span.classList.contains('up')) {
+          span.classList.remove('hidden');
+        }
+      });
+    });
+  } else {
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => {
+      const spans = key.querySelectorAll('span');
+      spans.forEach(span => {
+        // Make all spans hidden
+        if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
+          span.classList.add('hidden');
+        }
+        // Make active span with class 'down'
+        if (span.classList.contains('down')) {
+          span.classList.remove('hidden');
+        }
+      });
+    });
+  }
+};
 const deleteNextChar = () => {
   const textarea = document.querySelector('.textarea');
   const startPos = textarea.selectionStart;
@@ -508,48 +588,14 @@ const addNewLine = () => {
   textarea.selectionStart = startPos + 1;
   textarea.selectionEnd = startPos + 1;
 };
-const shiftOn = () => {
-  const keys = document.querySelectorAll('.key');
-  keys.forEach(key => {
-    const spans = key.querySelectorAll('span');
-    spans.forEach(span => {
-      // Make all spans hidden
-      if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
-        span.classList.add('hidden');
-      }
-      // Make active span with class 'up'
-      if (span.classList.contains('up')) {
-        span.classList.remove('hidden');
-      }
-    });
-  });
-};
-const shiftOff = () => {
-  const keys = document.querySelectorAll('.key');
-  keys.forEach(key => {
-    const spans = key.querySelectorAll('span');
-    spans.forEach(span => {
-      // Make all spans hidden
-      if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
-        span.classList.add('hidden');
-      }
-      // Make active span with class 'down'
-      if (span.classList.contains('down')) {
-        span.classList.remove('hidden');
-      }
-    });
-  });
-};
 const keyDownHandler = e => {
   const getLanguage = () => localStorage.getItem('language');
   const currentLanguage = getLanguage();
+  // Create shiftEn or shiftRu name
+  const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
   const keys = _keys__WEBPACK_IMPORTED_MODULE_0__["default"];
   const textarea = document.querySelector('.textarea');
   e.preventDefault();
-
-  // Check if caps is active
-  const caps = document.querySelector('.CapsLock');
-  const isCapsActive = caps.classList.contains('key_active');
   keys.forEach(key => {
     if (key.code === e.code) {
       switch (e.code) {
@@ -574,8 +620,31 @@ const keyDownHandler = e => {
         case 'ShiftRight':
           shiftOn();
           break;
+        case 'ControlLeft':
+          break;
+        case 'ControlRight':
+          break;
         default:
-          textarea.value += isCapsActive ? key[currentLanguage].toUpperCase() : key[currentLanguage];
+          // If both caps & shift are active
+          if (isCapsActive() && isShiftActive()) {
+            textarea.value += key.shiftEn ? key[`shift${optionName}`] : key[currentLanguage];
+            break;
+          }
+
+          // If only shift is active
+          if (isShiftActive()) {
+            textarea.value += key.shiftEn ? key[`shift${optionName}`] : key[currentLanguage].toUpperCase();
+            break;
+          }
+
+          // If only caps is active
+          if (isCapsActive()) {
+            textarea.value += key[currentLanguage].toUpperCase();
+            break;
+          }
+
+          // Default case
+          textarea.value += key[currentLanguage];
           break;
       }
     }
@@ -713,8 +782,11 @@ function renderKey(key, keyName) {
   }
   const shiftCaps = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('span', 'shift-caps');
   // If option for shift exists past it to specific span
-  // const shiftOption = getShiftOption(keyName);
-  // shiftCaps.innerText = shiftOption || key;
+  if (shiftOption) {
+    shiftCaps.innerText = shiftOption;
+  } else {
+    shiftCaps.innerText = key;
+  }
 
   // Default hidden state
   makeHidden(ru);
@@ -11516,4 +11588,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.51c761042aebd44b4d07.js.map
+//# sourceMappingURL=index.0da29b4dce425ffbf6a6.js.map

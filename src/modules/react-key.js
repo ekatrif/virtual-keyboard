@@ -217,6 +217,16 @@ const keyDownHandler = (e) => {
         case 'ShiftRight':
           shiftOn();
           break;
+        case 'ControlLeft':
+          break;
+        case 'ControlRight':
+          break;
+        case 'AltLeft':
+          break;
+        case 'AltRight':
+          break;
+        case 'MetaLeft':
+          break;
         default:
           // If both caps & shift are active
           if (isCapsActive() && isShiftActive()) {
