@@ -13,13 +13,23 @@ export default function renderKey(key, keyName) {
   const en = renderElement.default('span', 'key__en');
 
   const up = renderElement.default('span', 'up');
-  up.innerText = isCirillicLetter || isLatinLetter ? key.toUpperCase() : key;
+  // If key is a number or one letter
+  if (key.length === 1) {
+    up.innerText = isCirillicLetter || isLatinLetter ? key.toUpperCase() : key;
+  } else {
+    up.innerText = key;
+  }
 
   const down = renderElement.default('span', 'down');
   down.innerText = key;
 
   const caps = renderElement.default('span', 'caps');
-  up.innerText = isCirillicLetter || isLatinLetter ? key.toUpperCase() : key;
+  // If key is a number or one letter
+  if (key.length === 1) {
+    caps.innerText = isCirillicLetter || isLatinLetter ? key.toUpperCase() : key;
+  } else {
+    caps.innerText = key;
+  }
 
   const shiftCaps = renderElement.default('span', 'shift-caps');
   shiftCaps.innerText = key;

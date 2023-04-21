@@ -1,10 +1,15 @@
 const keyDownHandler = (e) => {
   const currentKey = document.querySelector(`.${e.code}`);
+  if (e.code === 'CapsLock') {
+    console.log("caps")
+    currentKey?.classList.toggle('key_active');
+  } else {
   currentKey?.classList.add('key_active');
+  }
 }
 
 const keyUpHandler = (e) => {
-  if (e.code) {
+  if (e.code && e.code !== 'CapsLock') {
     const currentKey = document.querySelector(`.${e.code}`);
     currentKey?.classList.remove('key_active');
   }
