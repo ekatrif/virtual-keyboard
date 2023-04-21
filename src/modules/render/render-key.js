@@ -29,7 +29,7 @@ export default function renderKey(key, keyName) {
   const en = renderElement.default('span', 'key__en');
 
   const up = renderElement.default('span', 'up');
-  // If key is a one letter
+  // If key is one letter
   if ((isCirillicLetter(key) || isLatinLetter(key)) && key.length === 1) {
     up.innerText = key.toUpperCase();
   } else {

@@ -134,6 +134,10 @@ const keyDownHandler = (e) => {
   const textarea = document.querySelector('.textarea');
   e.preventDefault();
 
+  // Check if caps is active
+  const caps = document.querySelector('.CapsLock');
+  const isCapsActive = caps.classList.contains('key_active');
+
   keys.forEach((key) => {
     if (key.code === e.code) {
       switch (e.code) {
@@ -159,7 +163,12 @@ const keyDownHandler = (e) => {
           shiftOn();
           break;
         default:
-          textarea.value += key[currentLanguage];
+          if (isCapsActive) {
+            textarea.value += key[currentLanguage].toUpperCase();
+          } else {
+            textarea.value += key[currentLanguage];
+          }
+
           break;
       }
     }

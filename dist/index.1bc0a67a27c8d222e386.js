@@ -54,7 +54,6 @@ __webpack_require__.r(__webpack_exports__);
 const keyDownHandler = e => {
   const currentKey = document.querySelector(`.${e.code}`);
   if (e.code === 'CapsLock') {
-    console.log("caps");
     currentKey?.classList.toggle('key_active');
   } else {
     currentKey?.classList.add('key_active');
@@ -123,67 +122,80 @@ __webpack_require__.r(__webpack_exports__);
   code: 'Backquote',
   ru: '`',
   en: '`',
-  shiftEn: '~'
+  shiftEn: '~',
+  shiftRu: 'Ё'
 }, {
   code: 'Digit1',
   ru: '1',
   en: '1',
-  shiftEn: '!'
+  shiftEn: '!',
+  shiftRu: '!'
 }, {
   code: 'Digit2',
   ru: '2',
   en: '2',
-  shiftEn: '@'
+  shiftEn: '@',
+  shiftRu: '"'
 }, {
   code: 'Digit3',
   ru: '3',
   en: '3',
-  shiftEn: '#'
+  shiftEn: '#',
+  shiftRu: '№'
 }, {
   code: 'Digit4',
   ru: '4',
   en: '4',
-  shiftEn: '$'
+  shiftEn: '$',
+  shiftRu: ';'
 }, {
   code: 'Digit5',
   ru: '5',
   en: '5',
-  shiftEn: '%'
+  shiftEn: '%',
+  shiftRu: '%'
 }, {
   code: 'Digit6',
   ru: '6',
   en: '6',
-  shiftEn: '^'
+  shiftEn: '^',
+  shiftRu: ':'
 }, {
   code: 'Digit7',
   ru: '7',
   en: '7',
-  shiftEn: '&'
+  shiftEn: '&',
+  shiftRu: '?'
 }, {
   code: 'Digit8',
   ru: '8',
   en: '8',
-  shiftEn: '*'
+  shiftEn: '*',
+  shiftRu: '*'
 }, {
   code: 'Digit9',
   ru: '9',
   en: '9',
-  shiftEn: '('
+  shiftEn: '(',
+  shiftRu: '('
 }, {
   code: 'Digit0',
   ru: '0',
   en: '0',
-  shiftEn: ')'
+  shiftEn: ')',
+  shiftRu: ')'
 }, {
   code: 'Minus',
   ru: '-',
   en: '-',
-  shiftEn: '_'
+  shiftEn: '_',
+  shiftRu: '_'
 }, {
   code: 'Equal',
   ru: '=',
   en: '=',
-  shiftEn: '+'
+  shiftEn: '+',
+  shiftRu: '+'
 }, {
   code: 'Backspace',
   ru: 'Backspace',
@@ -235,15 +247,21 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   code: 'BracketLeft',
   ru: 'х',
-  en: '['
+  en: '[',
+  shiftEn: '{',
+  shiftRu: 'Х'
 }, {
   code: 'BracketRight',
   ru: 'ъ',
-  en: ']'
+  en: ']',
+  shiftEn: '}',
+  shiftRu: 'Ъ'
 }, {
   code: 'Backslash',
   ru: '\\',
-  en: '\\'
+  en: '\\',
+  shiftEn: '|',
+  shiftRu: '/'
 }, {
   code: 'Delete',
   ru: 'Del',
@@ -291,11 +309,15 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   code: 'Semicolon',
   ru: 'ж',
-  en: ';'
+  en: ';',
+  shiftEn: ':',
+  shiftRu: 'Ж'
 }, {
   code: 'Quote',
   ru: 'э',
-  en: '\''
+  en: '\'',
+  shiftEn: '"',
+  shiftRu: 'Э'
 }, {
   code: 'Enter',
   ru: 'Enter',
@@ -335,15 +357,21 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   code: 'Comma',
   ru: 'б',
-  en: ','
+  en: ',',
+  shiftEn: '<',
+  shiftRu: 'Б'
 }, {
   code: 'Period',
   ru: 'ю',
-  en: '.'
+  en: '.',
+  shiftEn: '>',
+  shiftRu: 'Ю'
 }, {
   code: 'Slash',
   ru: '.',
-  en: '/'
+  en: '/',
+  shiftEn: '?',
+  shiftRu: ','
 }, {
   code: 'ArrowUp',
   ru: '▲',
@@ -518,6 +546,10 @@ const keyDownHandler = e => {
   const keys = _keys__WEBPACK_IMPORTED_MODULE_0__["default"];
   const textarea = document.querySelector('.textarea');
   e.preventDefault();
+
+  // Check if caps is active
+  const caps = document.querySelector('CapsLock');
+  const isCapsActive = caps.classList.contains('key_active');
   keys.forEach(key => {
     if (key.code === e.code) {
       switch (e.code) {
@@ -543,7 +575,11 @@ const keyDownHandler = e => {
           shiftOn();
           break;
         default:
-          textarea.value += key[currentLanguage];
+          if (isCapsActive) {
+            textarea.value += isCapsActive;
+          } else {
+            textarea.value += key[currentLanguage];
+          }
           break;
       }
     }
@@ -632,10 +668,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ renderKey)
 /* harmony export */ });
 /* harmony import */ var _render_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render-element */ "./src/modules/render/render-element.js");
+/* harmony import */ var _keys__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../keys */ "./src/modules/keys.js");
+
 
 const isLatinLetter = char => /[a-zA-Z]/.test(char);
 const isCirillicLetter = char => /[а-яА-Я]/.test(char);
 const makeHidden = element => element.classList.add('hidden');
+const keys = _keys__WEBPACK_IMPORTED_MODULE_1__["default"];
+const getLanguage = () => localStorage.getItem('language');
+const currentLanguage = getLanguage();
+// Create shiftEn or shiftRu name
+const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
+const getShiftOption = keyName => {
+  for (let i = 0; i < keys.length; i++) {
+    const char = keys[i];
+    if (char.code === keyName) {
+      // If option shiftEn exists, return true
+      return char[`shift${optionName}`];
+    }
+  }
+};
 function renderKey(key, keyName) {
   const keyWrapper = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('div', 'keyboard__key');
   keyWrapper.classList.add('key');
@@ -643,11 +695,16 @@ function renderKey(key, keyName) {
   const ru = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('span', 'key__ru');
   const en = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('span', 'key__en');
   const up = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('span', 'up');
-  // If key is a number or one letter
-  if (key.length === 1) {
-    up.innerText = isCirillicLetter || isLatinLetter ? key.toUpperCase() : key;
+  // If key is one letter
+  if ((isCirillicLetter(key) || isLatinLetter(key)) && key.length === 1) {
+    up.innerText = key.toUpperCase();
   } else {
     up.innerText = key;
+  }
+  // If option for shift exists past it to specific span
+  const shiftOption = getShiftOption(keyName);
+  if (shiftOption) {
+    up.innerText = shiftOption;
   }
   const down = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('span', 'down');
   down.innerText = key;
@@ -659,7 +716,9 @@ function renderKey(key, keyName) {
     caps.innerText = key;
   }
   const shiftCaps = _render_element__WEBPACK_IMPORTED_MODULE_0__["default"]('span', 'shift-caps');
-  shiftCaps.innerText = key;
+  // If option for shift exists past it to specific span
+  // const shiftOption = getShiftOption(keyName);
+  // shiftCaps.innerText = shiftOption || key;
 
   // Default hidden state
   makeHidden(ru);
@@ -11461,4 +11520,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.3a344eb45f92097cc00b.js.map
+//# sourceMappingURL=index.1bc0a67a27c8d222e386.js.map
