@@ -1,6 +1,6 @@
 export default [
   {
-    code: 'BackQuote',
+    code: 'Backquote',
     ru: '`',
     en: '`',
   },

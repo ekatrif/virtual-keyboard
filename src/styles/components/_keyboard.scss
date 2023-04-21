@@ -45,6 +45,18 @@
 
   transition: all 0.5s linear;
 
+  &:hover {
+    background: $key-hover-background-color;
+    transition: all 0.5s linear;
+  }
+
+  //An extra selector is needed to override special buttons classes, such as a space etc
+  .keyboard__row &_active {
+    border-radius: 40px;
+    background: $key-active-background-color;
+    transition: all 0.5s linear;
+  }
+
   &__ru {
   }
 
