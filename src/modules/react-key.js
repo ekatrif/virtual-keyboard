@@ -163,12 +163,8 @@ const keyDownHandler = (e) => {
           shiftOn();
           break;
         default:
-          if (isCapsActive) {
-            textarea.value += key[currentLanguage].toUpperCase();
-          } else {
-            textarea.value += key[currentLanguage];
-          }
-
+          textarea.value += isCapsActive ? key[currentLanguage].toUpperCase()
+            : key[currentLanguage];
           break;
       }
     }

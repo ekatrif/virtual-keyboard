@@ -548,7 +548,7 @@ const keyDownHandler = e => {
   e.preventDefault();
 
   // Check if caps is active
-  const caps = document.querySelector('CapsLock');
+  const caps = document.querySelector('.CapsLock');
   const isCapsActive = caps.classList.contains('key_active');
   keys.forEach(key => {
     if (key.code === e.code) {
@@ -575,11 +575,13 @@ const keyDownHandler = e => {
           shiftOn();
           break;
         default:
-          if (isCapsActive) {
-            textarea.value += isCapsActive;
-          } else {
-            textarea.value += key[currentLanguage];
-          }
+          textarea.value += isCapsActive ? key[currentLanguage].toUpperCase() : key[currentLanguage];
+          // if (isCapsActive) {
+          //   textarea.value += key[currentLanguage].toUpperCase();
+          // } else {
+          //   textarea.value += key[currentLanguage];
+          // }
+
           break;
       }
     }
@@ -11520,4 +11522,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.1bc0a67a27c8d222e386.js.map
+//# sourceMappingURL=index.fe7734f8e1427c307378.js.map
