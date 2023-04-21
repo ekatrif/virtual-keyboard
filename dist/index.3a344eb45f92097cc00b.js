@@ -122,55 +122,68 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ([{
   code: 'Backquote',
   ru: '`',
-  en: '`'
+  en: '`',
+  shiftEn: '~'
 }, {
   code: 'Digit1',
   ru: '1',
-  en: '1'
+  en: '1',
+  shiftEn: '!'
 }, {
   code: 'Digit2',
   ru: '2',
-  en: '2'
+  en: '2',
+  shiftEn: '@'
 }, {
   code: 'Digit3',
   ru: '3',
-  en: '3'
+  en: '3',
+  shiftEn: '#'
 }, {
   code: 'Digit4',
   ru: '4',
-  en: '4'
+  en: '4',
+  shiftEn: '$'
 }, {
   code: 'Digit5',
   ru: '5',
-  en: '5'
+  en: '5',
+  shiftEn: '%'
 }, {
   code: 'Digit6',
   ru: '6',
-  en: '6'
+  en: '6',
+  shiftEn: '^'
 }, {
   code: 'Digit7',
   ru: '7',
-  en: '7'
+  en: '7',
+  shiftEn: '&'
 }, {
   code: 'Digit8',
   ru: '8',
-  en: '8'
+  en: '8',
+  shiftEn: '*'
 }, {
   code: 'Digit9',
   ru: '9',
-  en: '9'
+  en: '9',
+  shiftEn: '('
 }, {
   code: 'Digit0',
   ru: '0',
-  en: '0'
+  en: '0',
+  shiftEn: ')'
 }, {
   code: 'Minus',
   ru: '-',
-  en: '-'
+  en: '-',
+  shiftEn: '_'
 }, {
   code: 'Equal',
   ru: '=',
-  en: '='
+  en: '=',
+  shiftEn: '+'
 }, {
   code: 'Backspace',
   ru: 'Backspace',
@@ -399,23 +412,27 @@ const deleteNextChar = () => {
   const currentValue = textarea.value;
   if (startPos === endPos) {
     textarea.value = currentValue.slice(0, startPos) + currentValue.slice(startPos + 1);
-    textarea.selectionStart = textarea.selectionEnd = startPos;
+    textarea.selectionStart = startPos;
+    textarea.selectionEnd = startPos;
   } else {
     textarea.value = currentValue.slice(0, startPos) + currentValue.slice(endPos);
-    textarea.selectionStart = textarea.selectionEnd = startPos;
+    textarea.selectionStart = startPos;
+    textarea.selectionEnd = startPos;
   }
 };
 const deletePrevChar = () => {
   const textarea = document.querySelector('.textarea');
   const startPos = textarea.selectionStart;
   const endPos = textarea.selectionEnd;
-  const text = textarea.value;
+  const currentValue = textarea.value;
   if (startPos === endPos) {
-    textarea.value = text.slice(0, startPos - 1) + text.slice(startPos);
-    textarea.selectionStart = textarea.selectionEnd = startPos - 1;
+    textarea.value = currentValue.slice(0, startPos - 1) + currentValue.slice(startPos);
+    textarea.selectionStart = startPos - 1;
+    textarea.selectionEnd = startPos - 1;
   } else {
-    textarea.value = text.slice(0, startPos) + text.slice(endPos);
-    textarea.selectionStart = textarea.selectionEnd = startPos;
+    textarea.value = currentValue.slice(0, startPos) + currentValue.slice(endPos);
+    textarea.selectionStart = startPos;
+    textarea.selectionEnd = startPos;
   }
 };
 const capsOn = () => {
@@ -454,6 +471,47 @@ const capsOnOff = () => {
   const caps = document.querySelector('.CapsLock');
   return caps.classList.contains('key_active') ? capsOn() : capsOff();
 };
+const addNewLine = () => {
+  const textarea = document.querySelector('.textarea');
+  const startPos = textarea.selectionStart;
+  const endPos = textarea.selectionEnd;
+  const currentValue = textarea.value;
+  textarea.value = `${currentValue.slice(0, startPos)}\n${currentValue.slice(endPos)}`;
+  textarea.selectionStart = startPos + 1;
+  textarea.selectionEnd = startPos + 1;
+};
+const shiftOn = () => {
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => {
+    const spans = key.querySelectorAll('span');
+    spans.forEach(span => {
+      // Make all spans hidden
+      if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
+        span.classList.add('hidden');
+      }
+      // Make active span with class 'up'
+      if (span.classList.contains('up')) {
+        span.classList.remove('hidden');
+      }
+    });
+  });
+};
+const shiftOff = () => {
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => {
+    const spans = key.querySelectorAll('span');
+    spans.forEach(span => {
+      // Make all spans hidden
+      if (span.classList.contains('up') || span.classList.contains('down') || span.classList.contains('caps') || span.classList.contains('shift-caps')) {
+        span.classList.add('hidden');
+      }
+      // Make active span with class 'down'
+      if (span.classList.contains('down')) {
+        span.classList.remove('hidden');
+      }
+    });
+  });
+};
 const keyDownHandler = e => {
   const getLanguage = () => localStorage.getItem('language');
   const currentLanguage = getLanguage();
@@ -475,6 +533,15 @@ const keyDownHandler = e => {
         case 'CapsLock':
           capsOnOff();
           break;
+        case 'Enter':
+          addNewLine();
+          break;
+        case 'ShiftLeft':
+          shiftOn();
+          break;
+        case 'ShiftRight':
+          shiftOn();
+          break;
         default:
           textarea.value += key[currentLanguage];
           break;
@@ -482,8 +549,17 @@ const keyDownHandler = e => {
     }
   });
 };
+const keyUpHandler = e => {
+  e.preventDefault();
+
+  // Turn Off shift effects
+  if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+    shiftOff();
+  }
+};
 function reactKey() {
   window.addEventListener('keydown', keyDownHandler);
+  window.addEventListener('keyup', keyUpHandler);
 }
 
 /***/ }),
@@ -11385,4 +11461,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.7b3a21dc202895df85d5.js.map
+//# sourceMappingURL=index.3a344eb45f92097cc00b.js.map
