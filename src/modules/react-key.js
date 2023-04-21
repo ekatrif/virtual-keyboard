@@ -1,5 +1,102 @@
 import * as allKeys from './keys';
 
+const isCapsActive = () => {
+  // Checks if caps is active
+  const caps = document.querySelector('.CapsLock');
+  return caps.classList.contains('key_active');
+}
+
+const isShiftActive = () => {
+  // Checks if shift is active
+  const shiftLeft = document.querySelector('.ShiftLeft');
+  const shiftRight = document.querySelector('.ShiftRight');
+  return shiftLeft.classList.contains('key_active') || shiftRight.classList.contains('key_active');
+}
+
+const capsShiftOn = () => {
+  const keys = document.querySelectorAll('.key');
+  keys.forEach((key) => {
+    const spans = key.querySelectorAll('span');
+    spans.forEach((span) => {
+      // Make all spans hidden
+      if (span.classList.contains('up') 
+      || span.classList.contains('down')
+      || span.classList.contains('caps')  
+      || span.classList.contains('shift-caps')) {
+        span.classList.add('hidden');
+      }
+      // Make active span with class 'shift-caps'
+      if (span.classList.contains('shift-caps')) {
+        span.classList.remove('hidden');
+      }
+    })
+  })
+}
+
+const shiftOn = () => {
+  if (isCapsActive()) {
+    capsShiftOn();
+  } else {
+    const keys = document.querySelectorAll('.key');
+    keys.forEach((key) => {
+      const spans = key.querySelectorAll('span');
+      spans.forEach((span) => {
+        // Make all spans hidden
+        if (span.classList.contains('up') 
+        || span.classList.contains('down')
+        || span.classList.contains('caps')  
+        || span.classList.contains('shift-caps')) {
+          span.classList.add('hidden');
+        }
+        // Make active span with class 'up'
+        if (span.classList.contains('up')) {
+          span.classList.remove('hidden');
+        }
+      })
+    })
+  }
+}
+
+const shiftOff = () => {
+  if (isCapsActive()) {
+    const keys = document.querySelectorAll('.key');
+    keys.forEach((key) => {
+      const spans = key.querySelectorAll('span');
+      spans.forEach((span) => {
+        // Make all spans hidden
+        if (span.classList.contains('up') 
+        || span.classList.contains('down')
+        || span.classList.contains('caps')  
+        || span.classList.contains('shift-caps')) {
+          span.classList.add('hidden');
+        }
+        // Make active span with class 'up'
+        if (span.classList.contains('up')) {
+          span.classList.remove('hidden');
+        }
+      })
+    })
+  } else {
+    const keys = document.querySelectorAll('.key');
+    keys.forEach((key) => {
+      const spans = key.querySelectorAll('span');
+      spans.forEach((span) => {
+        // Make all spans hidden
+        if (span.classList.contains('up') 
+        || span.classList.contains('down')
+        || span.classList.contains('caps')  
+        || span.classList.contains('shift-caps')) {
+          span.classList.add('hidden');
+        }
+        // Make active span with class 'down'
+        if (span.classList.contains('down')) {
+          span.classList.remove('hidden');
+        }
+      })
+    })
+  }
+}
+
 const deleteNextChar = () => {
     const textarea = document.querySelector('.textarea');
     const startPos = textarea.selectionStart;
@@ -87,56 +184,14 @@ const addNewLine = () => {
   textarea.selectionEnd = startPos + 1;
 }
 
-const shiftOn = () => {
-  const keys = document.querySelectorAll('.key');
-  keys.forEach((key) => {
-    const spans = key.querySelectorAll('span');
-    spans.forEach((span) => {
-      // Make all spans hidden
-      if (span.classList.contains('up') 
-      || span.classList.contains('down')
-      || span.classList.contains('caps')  
-      || span.classList.contains('shift-caps')) {
-        span.classList.add('hidden');
-      }
-      // Make active span with class 'up'
-      if (span.classList.contains('up')) {
-        span.classList.remove('hidden');
-      }
-    })
-  })
-}
-
-const shiftOff = () => {
-  const keys = document.querySelectorAll('.key');
-  keys.forEach((key) => {
-    const spans = key.querySelectorAll('span');
-    spans.forEach((span) => {
-      // Make all spans hidden
-      if (span.classList.contains('up') 
-      || span.classList.contains('down')
-      || span.classList.contains('caps')  
-      || span.classList.contains('shift-caps')) {
-        span.classList.add('hidden');
-      }
-      // Make active span with class 'down'
-      if (span.classList.contains('down')) {
-        span.classList.remove('hidden');
-      }
-    })
-  })
-}
-
 const keyDownHandler = (e) => {
   const getLanguage = () => localStorage.getItem('language');
   const currentLanguage = getLanguage();
+  // Create shiftEn or shiftRu name
+  const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
   const keys = allKeys.default;
   const textarea = document.querySelector('.textarea');
   e.preventDefault();
-
-  // Check if caps is active
-  const caps = document.querySelector('.CapsLock');
-  const isCapsActive = caps.classList.contains('key_active');
 
   keys.forEach((key) => {
     if (key.code === e.code) {
@@ -163,11 +218,31 @@ const keyDownHandler = (e) => {
           shiftOn();
           break;
         default:
-          textarea.value += isCapsActive ? key[currentLanguage].toUpperCase()
-            : key[currentLanguage];
+          // If both caps & shift are active
+          if (isCapsActive() && isShiftActive()) {
+            textarea.value += key.shiftEn ? key[`shift${optionName}`] 
+              : key[currentLanguage];
+            break;
+          }
+
+          // If only shift is active
+          if (isShiftActive()) {
+            textarea.value += key.shiftEn ? key[`shift${optionName}`] 
+              : key[currentLanguage].toUpperCase();
+            break;
+          }
+
+          // If only caps is active
+          if (isCapsActive()) {
+            textarea.value += key[currentLanguage].toUpperCase();
+            break;
+          }
+
+          // Default case
+          textarea.value += key[currentLanguage];
           break;
+          }
       }
-    }
   })
 }
 

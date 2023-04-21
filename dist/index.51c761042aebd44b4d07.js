@@ -576,12 +576,6 @@ const keyDownHandler = e => {
           break;
         default:
           textarea.value += isCapsActive ? key[currentLanguage].toUpperCase() : key[currentLanguage];
-          // if (isCapsActive) {
-          //   textarea.value += key[currentLanguage].toUpperCase();
-          // } else {
-          //   textarea.value += key[currentLanguage];
-          // }
-
           break;
       }
     }
@@ -11522,4 +11516,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.fe7734f8e1427c307378.js.map
+//# sourceMappingURL=index.51c761042aebd44b4d07.js.map

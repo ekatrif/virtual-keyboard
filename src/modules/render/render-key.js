@@ -54,8 +54,12 @@ export default function renderKey(key, keyName) {
 
   const shiftCaps = renderElement.default('span', 'shift-caps');
   // If option for shift exists past it to specific span
-  // const shiftOption = getShiftOption(keyName);
-  // shiftCaps.innerText = shiftOption || key;
+  if (shiftOption) {
+    shiftCaps.innerText = shiftOption;
+  } else {
+    shiftCaps.innerText = key;
+  }
+  
 
   // Default hidden state
   makeHidden(ru);
