@@ -11,13 +11,14 @@ const currentLanguage = getLanguage();
 const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
 
 const getShiftOption = (keyName) => {
-  for (let i=0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i += 1) {
     const char = keys[i];
     if (char.code === keyName) {
       // If option shiftEn exists, return true
       return char[`shift${optionName}`];
     }
   }
+  return false;
 };
 
 export default function renderKey(key, keyName) {
@@ -59,7 +60,6 @@ export default function renderKey(key, keyName) {
   } else {
     shiftCaps.innerText = key;
   }
-  
 
   // Default hidden state
   makeHidden(ru);

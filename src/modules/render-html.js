@@ -10,7 +10,7 @@ export default function renderHtml() {
   document.body.appendChild(container);
   container.appendChild(title.default);
   container.appendChild(textarea.default);
-  container.appendChild(keyboard.default);
+  container.appendChild(keyboard.keyboard);
   container.appendChild(paragraphOs.default);
   container.appendChild(paragraphLanguage.default);
 }

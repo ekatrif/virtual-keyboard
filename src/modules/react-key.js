@@ -1,17 +1,27 @@
 import * as allKeys from './keys';
+import * as renderKeys from './render/render-keyboard';
+
+const getLanguage = () => localStorage.getItem('language');
+let currentLanguage = getLanguage();
 
 const isCapsActive = () => {
   // Checks if caps is active
   const caps = document.querySelector('.CapsLock');
   return caps.classList.contains('key_active');
-}
+};
 
 const isShiftActive = () => {
   // Checks if shift is active
   const shiftLeft = document.querySelector('.ShiftLeft');
   const shiftRight = document.querySelector('.ShiftRight');
   return shiftLeft.classList.contains('key_active') || shiftRight.classList.contains('key_active');
-}
+};
+
+const isAltActive = () => {
+  // Checks if alt is active
+  const altLeft = document.querySelector('.AltLeft');
+  return altLeft.classList.contains('key_active');
+};
 
 const capsShiftOn = () => {
   const keys = document.querySelectorAll('.key');
@@ -19,9 +29,9 @@ const capsShiftOn = () => {
     const spans = key.querySelectorAll('span');
     spans.forEach((span) => {
       // Make all spans hidden
-      if (span.classList.contains('up') 
+      if (span.classList.contains('up')
       || span.classList.contains('down')
-      || span.classList.contains('caps')  
+      || span.classList.contains('caps')
       || span.classList.contains('shift-caps')) {
         span.classList.add('hidden');
       }
@@ -29,22 +39,29 @@ const capsShiftOn = () => {
       if (span.classList.contains('shift-caps')) {
         span.classList.remove('hidden');
       }
-    })
-  })
-}
+    });
+  });
+};
 
 const shiftOn = () => {
   if (isCapsActive()) {
     capsShiftOn();
   } else {
+    if (isAltActive()) {
+      // Change language
+      currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
+      localStorage.setItem('language', currentLanguage);
+      // Change keys
+      renderKeys.renderKeys();
+    }
     const keys = document.querySelectorAll('.key');
     keys.forEach((key) => {
       const spans = key.querySelectorAll('span');
       spans.forEach((span) => {
         // Make all spans hidden
-        if (span.classList.contains('up') 
+        if (span.classList.contains('up')
         || span.classList.contains('down')
-        || span.classList.contains('caps')  
+        || span.classList.contains('caps')
         || span.classList.contains('shift-caps')) {
           span.classList.add('hidden');
         }
@@ -52,10 +69,10 @@ const shiftOn = () => {
         if (span.classList.contains('up')) {
           span.classList.remove('hidden');
         }
-      })
-    })
+      });
+    });
   }
-}
+};
 
 const shiftOff = () => {
   if (isCapsActive()) {
@@ -64,9 +81,9 @@ const shiftOff = () => {
       const spans = key.querySelectorAll('span');
       spans.forEach((span) => {
         // Make all spans hidden
-        if (span.classList.contains('up') 
+        if (span.classList.contains('up')
         || span.classList.contains('down')
-        || span.classList.contains('caps')  
+        || span.classList.contains('caps')
         || span.classList.contains('shift-caps')) {
           span.classList.add('hidden');
         }
@@ -74,17 +91,17 @@ const shiftOff = () => {
         if (span.classList.contains('up')) {
           span.classList.remove('hidden');
         }
-      })
-    })
+      });
+    });
   } else {
     const keys = document.querySelectorAll('.key');
     keys.forEach((key) => {
       const spans = key.querySelectorAll('span');
       spans.forEach((span) => {
         // Make all spans hidden
-        if (span.classList.contains('up') 
+        if (span.classList.contains('up')
         || span.classList.contains('down')
-        || span.classList.contains('caps')  
+        || span.classList.contains('caps')
         || span.classList.contains('shift-caps')) {
           span.classList.add('hidden');
         }
@@ -92,26 +109,26 @@ const shiftOff = () => {
         if (span.classList.contains('down')) {
           span.classList.remove('hidden');
         }
-      })
-    })
+      });
+    });
   }
-}
+};
 
 const deleteNextChar = () => {
-    const textarea = document.querySelector('.textarea');
-    const startPos = textarea.selectionStart;
-    const endPos = textarea.selectionEnd;
-    const currentValue = textarea.value;
-    if (startPos === endPos) {
-      textarea.value = currentValue.slice(0, startPos) + currentValue.slice(startPos + 1);
-      textarea.selectionStart = startPos;
-      textarea.selectionEnd = startPos;
-    } else {
-      textarea.value = currentValue.slice(0, startPos) + currentValue.slice(endPos);
-      textarea.selectionStart = startPos;
-      textarea.selectionEnd = startPos;
-    }
-}
+  const textarea = document.querySelector('.textarea');
+  const startPos = textarea.selectionStart;
+  const endPos = textarea.selectionEnd;
+  const currentValue = textarea.value;
+  if (startPos === endPos) {
+    textarea.value = currentValue.slice(0, startPos) + currentValue.slice(startPos + 1);
+    textarea.selectionStart = startPos;
+    textarea.selectionEnd = startPos;
+  } else {
+    textarea.value = currentValue.slice(0, startPos) + currentValue.slice(endPos);
+    textarea.selectionStart = startPos;
+    textarea.selectionEnd = startPos;
+  }
+};
 
 const deletePrevChar = () => {
   const textarea = document.querySelector('.textarea');
@@ -127,7 +144,7 @@ const deletePrevChar = () => {
     textarea.selectionStart = startPos;
     textarea.selectionEnd = startPos;
   }
-}
+};
 
 const capsOn = () => {
   const keys = document.querySelectorAll('.key');
@@ -135,9 +152,9 @@ const capsOn = () => {
     const spans = key.querySelectorAll('span');
     spans.forEach((span) => {
       // Make all spans hidden
-      if (span.classList.contains('up') 
+      if (span.classList.contains('up')
       || span.classList.contains('down')
-      || span.classList.contains('caps')  
+      || span.classList.contains('caps')
       || span.classList.contains('shift-caps')) {
         span.classList.add('hidden');
       }
@@ -145,9 +162,9 @@ const capsOn = () => {
       if (span.classList.contains('caps')) {
         span.classList.remove('hidden');
       }
-    })
-  })
-}
+    });
+  });
+};
 
 const capsOff = () => {
   const keys = document.querySelectorAll('.key');
@@ -155,9 +172,9 @@ const capsOff = () => {
     const spans = key.querySelectorAll('span');
     spans.forEach((span) => {
       // Make all spans hidden
-      if (span.classList.contains('up') 
+      if (span.classList.contains('up')
       || span.classList.contains('down')
-      || span.classList.contains('caps')  
+      || span.classList.contains('caps')
       || span.classList.contains('shift-caps')) {
         span.classList.add('hidden');
       }
@@ -165,14 +182,14 @@ const capsOff = () => {
       if (span.classList.contains('down')) {
         span.classList.remove('hidden');
       }
-    })
-  })
-}
+    });
+  });
+};
 
 const capsOnOff = () => {
   const caps = document.querySelector('.CapsLock');
   return caps.classList.contains('key_active') ? capsOn() : capsOff();
-}
+};
 
 const addNewLine = () => {
   const textarea = document.querySelector('.textarea');
@@ -182,11 +199,19 @@ const addNewLine = () => {
   textarea.value = `${currentValue.slice(0, startPos)}\n${currentValue.slice(endPos)}`;
   textarea.selectionStart = startPos + 1;
   textarea.selectionEnd = startPos + 1;
+};
+
+const checkShift = () => {
+  if (isShiftActive()) {
+    // Change language
+    currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
+    localStorage.setItem('language', currentLanguage);
+    // Change keys
+    renderKeys.renderKeys();
+  }
 }
 
 const keyDownHandler = (e) => {
-  const getLanguage = () => localStorage.getItem('language');
-  const currentLanguage = getLanguage();
   // Create shiftEn or shiftRu name
   const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
   const keys = allKeys.default;
@@ -222,6 +247,7 @@ const keyDownHandler = (e) => {
         case 'ControlRight':
           break;
         case 'AltLeft':
+          checkShift();
           break;
         case 'AltRight':
           break;
@@ -230,14 +256,14 @@ const keyDownHandler = (e) => {
         default:
           // If both caps & shift are active
           if (isCapsActive() && isShiftActive()) {
-            textarea.value += key.shiftEn ? key[`shift${optionName}`] 
+            textarea.value += key.shiftEn ? key[`shift${optionName}`]
               : key[currentLanguage];
             break;
           }
 
           // If only shift is active
           if (isShiftActive()) {
-            textarea.value += key.shiftEn ? key[`shift${optionName}`] 
+            textarea.value += key.shiftEn ? key[`shift${optionName}`]
               : key[currentLanguage].toUpperCase();
             break;
           }
@@ -251,10 +277,10 @@ const keyDownHandler = (e) => {
           // Default case
           textarea.value += key[currentLanguage];
           break;
-          }
       }
-  })
-}
+    }
+  });
+};
 
 const keyUpHandler = (e) => {
   e.preventDefault();
@@ -263,7 +289,7 @@ const keyUpHandler = (e) => {
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
     shiftOff();
   }
-}
+};
 
 export default function reactKey() {
   window.addEventListener('keydown', keyDownHandler);

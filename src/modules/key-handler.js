@@ -5,6 +5,6 @@ export default function keyHandler() {
   // Highlight selected key
   highlightKey.default();
 
-  // Add char to texarea
+  // React on key pressing
   reactKey.default();
 }
