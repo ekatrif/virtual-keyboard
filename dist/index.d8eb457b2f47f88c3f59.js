@@ -570,12 +570,15 @@ const deletePrevChar = () => {
 };
 const addSpace = () => {
   const textarea = document.querySelector('.textarea');
-  const startPos = textarea.selectionStart;
   const endPos = textarea.selectionEnd;
   const currentValue = textarea.value;
   textarea.value = `${currentValue.slice(0, endPos)} ${currentValue.slice(endPos)}`;
   textarea.selectionStart = endPos + 1;
   textarea.selectionEnd = endPos + 1;
+};
+const addChar = () => {
+  const textarea = document.querySelector('.textarea');
+  textarea.value += key[currentLanguage];
 };
 const capsOn = () => {
   const keys = document.querySelectorAll('.key');
@@ -696,7 +699,7 @@ const keyDownHandler = e => {
           }
 
           // Default case
-          textarea.value += key[currentLanguage];
+          addChar();
           break;
       }
     }
@@ -11684,4 +11687,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.c05511f705c3086cf36e.js.map
+//# sourceMappingURL=index.d8eb457b2f47f88c3f59.js.map

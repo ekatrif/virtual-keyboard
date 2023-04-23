@@ -166,6 +166,15 @@ const addSpace = () => {
   textarea.selectionEnd = endPos + 1;
 };
 
+const addChar = (key) => {
+  const textarea = document.querySelector('.textarea');
+  const endPos = textarea.selectionEnd;
+  const currentValue = textarea.value;
+  textarea.value = `${currentValue.slice(0, endPos)}${key[currentLanguage]}${currentValue.slice(endPos)}`;
+  textarea.selectionStart = endPos + 1;
+  textarea.selectionEnd = endPos + 1;
+};
+
 const capsOn = () => {
   const keys = document.querySelectorAll('.key');
   keys.forEach((key) => {
@@ -299,7 +308,7 @@ const keyDownHandler = (e) => {
           }
 
           // Default case
-          textarea.value += key[currentLanguage];
+          addChar(key);
           break;
       }
     }
