@@ -8,3 +8,4 @@ export default function renderElement(tag, classes) {
 // TODO Пробел не ставит в середине строки
 // TODO Всё проверить
 // TODO Исправить ошибки линтера
+// TODO Отрефачить render-key

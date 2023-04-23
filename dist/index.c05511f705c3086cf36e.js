@@ -432,8 +432,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ reactKey)
 /* harmony export */ });
 /* harmony import */ var _keys__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./keys */ "./src/modules/keys.js");
-/* harmony import */ var _render_render_keyboard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render/render-keyboard */ "./src/modules/render/render-keyboard.js");
-
 
 const getLanguage = () => localStorage.getItem('language');
 let currentLanguage = getLanguage();
@@ -455,7 +453,6 @@ const isAltActive = () => {
 };
 const toggleActiveLanguageClass = () => {
   const languageWrapper = document.querySelectorAll(`.key__${currentLanguage}`);
-  console.log(languageWrapper);
   languageWrapper.forEach(item => {
     item.classList.remove('hidden');
   });
@@ -571,6 +568,15 @@ const deletePrevChar = () => {
     textarea.selectionEnd = startPos;
   }
 };
+const addSpace = () => {
+  const textarea = document.querySelector('.textarea');
+  const startPos = textarea.selectionStart;
+  const endPos = textarea.selectionEnd;
+  const currentValue = textarea.value;
+  textarea.value = `${currentValue.slice(0, endPos)} ${currentValue.slice(endPos)}`;
+  textarea.selectionStart = endPos + 1;
+  textarea.selectionEnd = endPos + 1;
+};
 const capsOn = () => {
   const keys = document.querySelectorAll('.key');
   keys.forEach(key => {
@@ -667,6 +673,9 @@ const keyDownHandler = e => {
           break;
         case 'MetaLeft':
           break;
+        case 'Space':
+          addSpace();
+          break;
         default:
           // If both caps & shift are active
           if (isCapsActive() && isShiftActive()) {
@@ -761,9 +770,10 @@ function renderElement(tag, classes) {
 }
 
 // TODO сделать массив классов вместо одного
-// TODO В русской ракладке неверно отрисовывается ШИФТ
+// TODO Пробел не ставит в середине строки
 // TODO Всё проверить
 // TODO Исправить ошибки линтера
+// TODO Отрефачить render-key
 
 /***/ }),
 
@@ -792,7 +802,7 @@ const getShiftOption = (keyName, language) => {
     if (char.code === keyName) {
       // If option shiftEn exists, return true
       const shiftOption = language.charAt(0).toUpperCase() + language.slice(1);
-      return char[`shift${language}`];
+      return char[`shift${shiftOption}`];
     }
   }
   return false;
@@ -816,7 +826,6 @@ function renderKey(keyName) {
   }
   // If option for shift exists past it to specific span
   let shiftOption = getShiftOption(keyName, 'ru');
-  console.log(shiftOption);
   if (shiftOption) {
     upRu.innerText = shiftOption;
   }
@@ -11675,4 +11684,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.ad2fb20eb365e651ee51.js.map
+//# sourceMappingURL=index.c05511f705c3086cf36e.js.map

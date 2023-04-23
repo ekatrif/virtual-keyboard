@@ -157,6 +157,15 @@ const deletePrevChar = () => {
   }
 };
 
+const addSpace = () => {
+  const textarea = document.querySelector('.textarea');
+  const endPos = textarea.selectionEnd;
+  const currentValue = textarea.value;
+  textarea.value = `${currentValue.slice(0, endPos)} ${currentValue.slice(endPos)}`;
+  textarea.selectionStart = endPos + 1;
+  textarea.selectionEnd = endPos + 1;
+};
+
 const capsOn = () => {
   const keys = document.querySelectorAll('.key');
   keys.forEach((key) => {
@@ -264,6 +273,9 @@ const keyDownHandler = (e) => {
         case 'AltRight':
           break;
         case 'MetaLeft':
+          break;
+        case 'Space':
+          addSpace();
           break;
         default:
           // If both caps & shift are active
