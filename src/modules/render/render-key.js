@@ -5,23 +5,23 @@ const isLatinLetter = (char) => /[a-zA-Z]/.test(char);
 const isCirillicLetter = (char) => /[а-яА-Я]/.test(char);
 const makeHidden = (element) => element.classList.add('hidden');
 const keys = allKeys.default;
-const getLanguage = () => localStorage.getItem('language');
-const currentLanguage = getLanguage();
-// Create shiftEn or shiftRu name
-const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
 
-const getShiftOption = (keyName) => {
+const getShiftOption = (keyName, language) => {
   for (let i = 0; i < keys.length; i += 1) {
     const char = keys[i];
     if (char.code === keyName) {
       // If option shiftEn exists, return true
-      return char[`shift${optionName}`];
+      const shiftOption = language.charAt(0).toUpperCase() + language.slice(1);
+      return char[`shift${shiftOption}`];
     }
   }
   return false;
 };
 
-export default function renderKey(key, keyName) {
+export default function renderKey(keyName) {
+  const currentKey = keys.filter((item) => item.code === keyName);
+  const key = currentKey[0];
+
   const keyWrapper = renderElement.default('div', 'keyboard__key');
   keyWrapper.classList.add('key');
   keyWrapper.classList.add(keyName);
@@ -29,53 +29,88 @@ export default function renderKey(key, keyName) {
   const ru = renderElement.default('span', 'key__ru');
   const en = renderElement.default('span', 'key__en');
 
-  const up = renderElement.default('span', 'up');
+  // Renderv key value in up register
+  const upRu = renderElement.default('span', 'up');
   // If key is one letter
-  if ((isCirillicLetter(key) || isLatinLetter(key)) && key.length === 1) {
-    up.innerText = key.toUpperCase();
+  if (isCirillicLetter(key.ru) && key.ru.length === 1) {
+    upRu.innerText = key.ru.toUpperCase();
   } else {
-    up.innerText = key;
+    upRu.innerText = key.ru;
   }
   // If option for shift exists past it to specific span
-  const shiftOption = getShiftOption(keyName);
+  let shiftOption = getShiftOption(keyName, 'ru');
   if (shiftOption) {
-    up.innerText = shiftOption;
+    upRu.innerText = shiftOption;
   }
 
-  const down = renderElement.default('span', 'down');
-  down.innerText = key;
+  const upEn = renderElement.default('span', 'up');
+  // If key is one letter
+  if (isLatinLetter(key.en) && key.en.length === 1) {
+    upEn.innerText = key.en.toUpperCase();
+  } else {
+    upEn.innerText = key.en;
+  }
+  // If option for shift exists past it to specific span
+  shiftOption = getShiftOption(keyName, 'en');
+  if (shiftOption) {
+    upEn.innerText = shiftOption;
+  }
 
-  const caps = renderElement.default('span', 'caps');
+  const downRu = renderElement.default('span', 'down');
+  downRu.innerText = key.ru;
+  const downEn = renderElement.default('span', 'down');
+  downEn.innerText = key.en;
+
+  const capsRu = renderElement.default('span', 'caps');
   // If key is a number or one letter
-  if (key.length === 1) {
-    caps.innerText = isCirillicLetter || isLatinLetter ? key.toUpperCase() : key;
+  if (key.ru.length === 1) {
+    capsRu.innerText = isCirillicLetter || isLatinLetter ? key.ru.toUpperCase() : key.ru;
   } else {
-    caps.innerText = key;
+    capsRu.innerText = key.ru;
+  }
+  const capsEn = renderElement.default('span', 'caps');
+  // If key is a number or one letter
+  if (key.en.length === 1) {
+    capsEn.innerText = isCirillicLetter || isLatinLetter ? key.en.toUpperCase() : key.en;
+  } else {
+    capsEn.innerText = key.en;
   }
 
-  const shiftCaps = renderElement.default('span', 'shift-caps');
+  const shiftCapsRu = renderElement.default('span', 'shift-caps');
   // If option for shift exists past it to specific span
+  shiftOption = getShiftOption(keyName, 'ru');
   if (shiftOption) {
-    shiftCaps.innerText = shiftOption;
+    shiftCapsRu.innerText = shiftOption;
   } else {
-    shiftCaps.innerText = key;
+    shiftCapsRu.innerText = key.ru;
+  }
+  const shiftCapsEn = renderElement.default('span', 'shift-caps');
+  // If option for shift exists past it to specific span
+  shiftOption = getShiftOption(keyName, 'en');
+  if (shiftOption) {
+    shiftCapsEn.innerText = shiftOption;
+  } else {
+    shiftCapsEn.innerText = key.en;
   }
 
   // Default hidden state
   makeHidden(ru);
-  makeHidden(up);
-  makeHidden(caps);
-  makeHidden(shiftCaps);
+  makeHidden(upRu);
+  makeHidden(capsRu);
+  makeHidden(shiftCapsRu);
+  makeHidden(upEn);
+  makeHidden(capsEn);
+  makeHidden(shiftCapsEn);
 
-  ru.append(down);
-  ru.append(up);
-  ru.append(caps);
-  ru.append(shiftCaps);
+  ru.append(downRu);
+  ru.append(upRu);
+  ru.append(capsRu);
+  ru.append(shiftCapsRu);
 
-  en.append(down);
-  en.append(up);
-  en.append(caps);
-  en.append(shiftCaps);
+  en.append(downEn);
+  en.append(upEn);
+  en.append(capsEn);
+  en.append(shiftCapsEn);
 
   keyWrapper.append(ru);
   keyWrapper.append(en);

@@ -15,9 +15,9 @@ const renderRow = (indexStart, indexEnd) => {
   const keyboardRow = renderElement.default('div', 'keyboard__row');
   for (let i = indexStart; i < indexEnd; i += 1) {
     const currentObject = keys[i];
-    const key = currentLanguage === 'en' ? currentObject.en : currentObject.ru;
+    // const key = currentLanguage === 'en' ? currentObject.en : currentObject.ru;
     const keyName = currentObject.code;
-    keyboardRow.append(renderKey.default(key, keyName));
+    keyboardRow.append(renderKey.default(keyName));
   }
   keyboard.append(keyboardRow);
 };

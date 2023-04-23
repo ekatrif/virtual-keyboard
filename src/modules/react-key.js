@@ -1,5 +1,4 @@
 import * as allKeys from './keys';
-import * as renderKeys from './render/render-keyboard';
 
 const getLanguage = () => localStorage.getItem('language');
 let currentLanguage = getLanguage();
@@ -21,6 +20,17 @@ const isAltActive = () => {
   // Checks if alt is active
   const altLeft = document.querySelector('.AltLeft');
   return altLeft.classList.contains('key_active');
+};
+
+const toggleActiveLanguageClass = () => {
+  const languageWrapper = document.querySelectorAll(`.key__${currentLanguage}`);
+  languageWrapper.forEach((item) => {
+    item.classList.remove('hidden');
+  });
+  const hiddenLanguageWrapper = currentLanguage === 'en' ? document.querySelectorAll('.key__ru') : document.querySelectorAll('.key__en');
+  hiddenLanguageWrapper.forEach((item) => {
+    item.classList.add('hidden');
+  });
 };
 
 const capsShiftOn = () => {
@@ -51,8 +61,9 @@ const shiftOn = () => {
       // Change language
       currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
       localStorage.setItem('language', currentLanguage);
-      // Change keys
-      renderKeys.renderKeys();
+
+      // Toggle language container hidden class
+      toggleActiveLanguageClass();
     }
     const keys = document.querySelectorAll('.key');
     keys.forEach((key) => {
@@ -206,10 +217,11 @@ const checkShift = () => {
     // Change language
     currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
     localStorage.setItem('language', currentLanguage);
-    // Change keys
-    renderKeys.renderKeys();
+
+    // Toggle language container hidden class
+    toggleActiveLanguageClass();
   }
-}
+};
 
 const keyDownHandler = (e) => {
   // Create shiftEn or shiftRu name
