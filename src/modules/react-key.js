@@ -130,6 +130,7 @@ const deleteNextChar = () => {
   const startPos = textarea.selectionStart;
   const endPos = textarea.selectionEnd;
   const currentValue = textarea.value;
+  textarea.focus();
   if (startPos === endPos) {
     textarea.value = currentValue.slice(0, startPos) + currentValue.slice(startPos + 1);
     textarea.selectionStart = startPos;
@@ -146,6 +147,7 @@ const deletePrevChar = () => {
   const startPos = textarea.selectionStart;
   const endPos = textarea.selectionEnd;
   const currentValue = textarea.value;
+  textarea.focus();
   if (startPos === endPos) {
     textarea.value = currentValue.slice(0, startPos - 1) + currentValue.slice(startPos);
     textarea.selectionStart = startPos - 1;
@@ -159,6 +161,7 @@ const deletePrevChar = () => {
 
 const addSpace = () => {
   const textarea = document.querySelector('.textarea');
+  textarea.focus();
   const endPos = textarea.selectionEnd;
   const currentValue = textarea.value;
   textarea.value = `${currentValue.slice(0, endPos)} ${currentValue.slice(endPos)}`;
@@ -170,6 +173,7 @@ const addChar = (key) => {
   const textarea = document.querySelector('.textarea');
   const endPos = textarea.selectionEnd;
   const currentValue = textarea.value;
+  textarea.focus();
   textarea.value = `${currentValue.slice(0, endPos)}${key[currentLanguage]}${currentValue.slice(endPos)}`;
   textarea.selectionStart = endPos + 1;
   textarea.selectionEnd = endPos + 1;
@@ -216,12 +220,15 @@ const capsOff = () => {
 };
 
 const capsOnOff = () => {
+  const textarea = document.querySelector('.textarea');
+  textarea.focus();
   const caps = document.querySelector('.CapsLock');
   return caps.classList.contains('key_active') ? capsOn() : capsOff();
 };
 
 const addNewLine = () => {
   const textarea = document.querySelector('.textarea');
+  textarea.focus();
   const startPos = textarea.selectionStart;
   const endPos = textarea.selectionEnd;
   const currentValue = textarea.value;
@@ -324,7 +331,111 @@ const keyUpHandler = (e) => {
   }
 };
 
+const mouseupHandler = (e) => {
+  if (e.target.closest('.key')) {
+    e.preventDefault();
+
+    // Choose pressed key container
+    const currentKeyWrapper = e.target.closest('.key');
+
+    // Find pressed key code
+    const keyClasses = currentKeyWrapper.classList;
+    const currentKeyCode = [...keyClasses].filter((item) => item !== 'key' && item !== 'keyboard__key')[0];
+
+    // Turn Off shift effects
+    if (currentKeyCode === 'ShiftLeft' || currentKeyCode === 'ShiftRight') {
+      shiftOff();
+    }
+  }
+};
+
+const mousedownHandler = (e) => {
+  if (e.target.closest('.key')) {
+    // Create shiftEn or shiftRu name
+    const optionName = currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1);
+    const keys = allKeys.default;
+    const textarea = document.querySelector('.textarea');
+    e.preventDefault();
+
+    // Choose pressed key container
+    const currentKeyWrapper = e.target.closest('.key');
+
+    // Find pressed key code
+    const keyClasses = currentKeyWrapper.classList;
+    const currentKeyCode = [...keyClasses].filter((item) => item !== 'key' && item !== 'keyboard__key')[0];
+    const filteredKeys = keys.filter((item) => Object.values(item).includes(currentKeyCode));
+    const key = filteredKeys[0];
+
+    switch (currentKeyCode) {
+      case 'Backspace':
+        deletePrevChar();
+        break;
+      case 'Tab':
+        textarea.value += '\u0009';
+        break;
+      case 'Delete':
+        deleteNextChar();
+        break;
+      case 'CapsLock':
+        capsOnOff();
+        break;
+      case 'Enter':
+        addNewLine();
+        break;
+      case 'ShiftLeft':
+        shiftOn();
+        break;
+      case 'ShiftRight':
+        shiftOn();
+        break;
+      case 'ControlLeft':
+        break;
+      case 'ControlRight':
+        break;
+      case 'AltLeft':
+        break;
+      case 'AltRight':
+        break;
+      case 'MetaLeft':
+        break;
+      case 'Space':
+        addSpace();
+        break;
+      default:
+        // If both caps & shift are active
+        if (isCapsActive() && isShiftActive()) {
+          textarea.value += key.shiftEn ? key[`shift${optionName}`]
+            : key[currentLanguage];
+          break;
+        }
+
+        // If only shift is active
+        if (isShiftActive()) {
+          textarea.value += key.shiftEn ? key[`shift${optionName}`]
+            : key[currentLanguage].toUpperCase();
+          break;
+        }
+
+        // If only caps is active
+        if (isCapsActive()) {
+          textarea.value += key[currentLanguage].toUpperCase();
+          break;
+        }
+
+        // Default case
+        addChar(key);
+        break;
+    }
+  }
+};
+
 export default function reactKey() {
+  // React on key press
   window.addEventListener('keydown', keyDownHandler);
   window.addEventListener('keyup', keyUpHandler);
+
+  // React on key click
+  const keyboardWrapper = document.querySelector('.keyboard');
+  keyboardWrapper.addEventListener('mousedown', mousedownHandler);
+  keyboardWrapper.addEventListener('mouseup', mouseupHandler);
 }

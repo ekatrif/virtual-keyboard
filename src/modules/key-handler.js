@@ -5,6 +5,6 @@ export default function keyHandler() {
   // Highlight selected key
   highlightKey.default();
 
-  // React on key pressing
+  // React on key press & click
   reactKey.default();
 }

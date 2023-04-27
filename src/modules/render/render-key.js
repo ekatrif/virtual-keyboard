@@ -10,7 +10,7 @@ const getShiftOption = (keyName, language) => {
   for (let i = 0; i < keys.length; i += 1) {
     const char = keys[i];
     if (char.code === keyName) {
-      // If option shiftEn exists, return true
+      // If option shiftEn exists, return it, if not - false
       const shiftOption = language.charAt(0).toUpperCase() + language.slice(1);
       return char[`shift${shiftOption}`];
     }
@@ -96,6 +96,9 @@ export default function renderKey(keyName) {
   // Default hidden state
   makeHidden(ru);
   makeHidden(upRu);
+  makeHidden(downRu);
+  makeHidden(capsRu);
+  makeHidden(shiftCapsRu);
   makeHidden(capsRu);
   makeHidden(shiftCapsRu);
   makeHidden(upEn);
