@@ -681,7 +681,7 @@ const keyDownHandler = e => {
           deletePrevChar();
           break;
         case 'Tab':
-          textarea.value += '\u0009';
+          addTab();
           break;
         case 'Delete':
           deleteNextChar();
@@ -903,12 +903,6 @@ function renderElement(tag, classes) {
   element.classList.add(classes);
   return element;
 }
-// TODO сделать массив классов вместо одного
-// TODO Всё проверить
-// TODO Исправить ошибки линтера
-// TODO Отрефачить render-key
-// Переписать Tab в 2 файлах
-// Повесить флаги на нажатие клавиш
 
 /***/ }),
 
@@ -11822,4 +11816,4 @@ _modules_key_handler__WEBPACK_IMPORTED_MODULE_3__["default"]();
 
 /******/ })()
 ;
-//# sourceMappingURL=index.81b498713142da91d77f.js.map
+//# sourceMappingURL=index.877e82f59fdb8c02cc6c.js.map
