@@ -18,7 +18,7 @@ const getShiftOption = (keyName, language) => {
   return false;
 };
 
-export default function renderKey(keyName) {
+export default function renderKey(keyName, language) {
   const currentKey = keys.filter((item) => item.code === keyName);
   const key = currentKey[0];
 
@@ -94,16 +94,25 @@ export default function renderKey(keyName) {
   }
 
   // Default hidden state
-  makeHidden(ru);
-  makeHidden(upRu);
-  makeHidden(downRu);
-  makeHidden(capsRu);
-  makeHidden(shiftCapsRu);
-  makeHidden(capsRu);
-  makeHidden(shiftCapsRu);
-  makeHidden(upEn);
-  makeHidden(capsEn);
-  makeHidden(shiftCapsEn);
+  if (language === 'en') {
+    makeHidden(ru);
+    makeHidden(upRu);
+    makeHidden(downRu);
+    makeHidden(capsRu);
+    makeHidden(shiftCapsRu);
+    makeHidden(upEn);
+    makeHidden(capsEn);
+    makeHidden(shiftCapsEn);
+  } else {
+    makeHidden(en);
+    makeHidden(upEn);
+    makeHidden(downEn);
+    makeHidden(capsEn);
+    makeHidden(shiftCapsEn);
+    makeHidden(upRu);
+    makeHidden(capsRu);
+    makeHidden(shiftCapsRu);
+  }
 
   ru.append(downRu);
   ru.append(upRu);

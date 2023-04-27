@@ -2,8 +2,10 @@ import * as allKeys from '../keys';
 import * as renderElement from './render-element';
 import * as renderKey from './render-key';
 
-// Default english layout
-localStorage.setItem('language', 'en');
+// If language is not set, set default english layout
+if (!localStorage.getItem('language')) {
+  localStorage.setItem('language', 'en');
+}
 
 const keys = allKeys.default;
 
@@ -15,9 +17,8 @@ const renderRow = (indexStart, indexEnd) => {
   const keyboardRow = renderElement.default('div', 'keyboard__row');
   for (let i = indexStart; i < indexEnd; i += 1) {
     const currentObject = keys[i];
-    // const key = currentLanguage === 'en' ? currentObject.en : currentObject.ru;
     const keyName = currentObject.code;
-    keyboardRow.append(renderKey.default(keyName));
+    keyboardRow.append(renderKey.default(keyName, currentLanguage));
   }
   keyboard.append(keyboardRow);
 };
