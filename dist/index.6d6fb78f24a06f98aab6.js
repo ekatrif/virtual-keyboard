@@ -904,7 +904,7 @@
         }
         return false;
       };
-      function renderKey(keyName) {
+      function renderKey(keyName, language) {
         const currentKey = keys.filter((item) => item.code === keyName);
         const key = currentKey[0];
         const keyWrapper = _render_element__WEBPACK_IMPORTED_MODULE_0__.default('div', 'keyboard__key');
@@ -974,16 +974,25 @@
         }
 
         // Default hidden state
-        makeHidden(ru);
-        makeHidden(upRu);
-        makeHidden(downRu);
-        makeHidden(capsRu);
-        makeHidden(shiftCapsRu);
-        makeHidden(capsRu);
-        makeHidden(shiftCapsRu);
-        makeHidden(upEn);
-        makeHidden(capsEn);
-        makeHidden(shiftCapsEn);
+        if (language === 'en') {
+          makeHidden(ru);
+          makeHidden(upRu);
+          makeHidden(downRu);
+          makeHidden(capsRu);
+          makeHidden(shiftCapsRu);
+          makeHidden(upEn);
+          makeHidden(capsEn);
+          makeHidden(shiftCapsEn);
+        } else {
+          makeHidden(en);
+          makeHidden(upEn);
+          makeHidden(downEn);
+          makeHidden(capsEn);
+          makeHidden(shiftCapsEn);
+          makeHidden(upRu);
+          makeHidden(capsRu);
+          makeHidden(shiftCapsRu);
+        }
         ru.append(downRu);
         ru.append(upRu);
         ru.append(capsRu);
@@ -1012,8 +1021,10 @@
       /* harmony import */ const _render_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render-element */ './src/modules/render/render-element.js');
       /* harmony import */ const _render_key__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./render-key */ './src/modules/render/render-key.js');
 
-      // Default english layout
-      localStorage.setItem('language', 'en');
+      // If language is not set, set default english layout
+      if (!localStorage.getItem('language')) {
+        localStorage.setItem('language', 'en');
+      }
       const keys = _keys__WEBPACK_IMPORTED_MODULE_0__.default;
       const keyboard = _render_element__WEBPACK_IMPORTED_MODULE_1__.default('div', 'keyboard');
       const renderRow = (indexStart, indexEnd) => {
@@ -1022,9 +1033,8 @@
         const keyboardRow = _render_element__WEBPACK_IMPORTED_MODULE_1__.default('div', 'keyboard__row');
         for (let i = indexStart; i < indexEnd; i += 1) {
           const currentObject = keys[i];
-          // const key = currentLanguage === 'en' ? currentObject.en : currentObject.ru;
           const keyName = currentObject.code;
-          keyboardRow.append(_render_key__WEBPACK_IMPORTED_MODULE_2__.default(keyName));
+          keyboardRow.append(_render_key__WEBPACK_IMPORTED_MODULE_2__.default(keyName, currentLanguage));
         }
         keyboard.append(keyboardRow);
       };
@@ -4551,7 +4561,7 @@
         const $map = createArrayMethod(1, (O, length) => allocate(speciesConstructor(O, O[DEF_CONSTRUCTOR]), length));
 
         const LITTLE_ENDIAN = fails(() =>
-        // eslint-disable-next-line no-undef
+          // eslint-disable-next-line no-undef
           new Uint8Array(new Uint16Array([1]).buffer)[0] === 1);
 
         const FORCED_SET = !!Uint8Array && !!Uint8Array[PROTOTYPE].set && fails(() => {
@@ -6571,7 +6581,7 @@
       const $toPrecision = 1.0.toPrecision;
 
       $export($export.P + $export.F * ($fails(() =>
-      // IE7-
+        // IE7-
         $toPrecision.call(1, undefined) !== '1') || !$fails(() => {
         // V8 ~ Android 4.3-
         $toPrecision.call({});
@@ -9260,10 +9270,46 @@
       /* harmony export */ __webpack_require__.d(__webpack_exports__, {
         /* harmony export */ default: () => (__WEBPACK_DEFAULT_EXPORT__),
         /* harmony export */ });
+      /* harmony import */ const _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../node_modules/html-loader/dist/runtime/getUrl.js */ './node_modules/html-loader/dist/runtime/getUrl.js');
+      /* harmony import */ const _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default = /* #__PURE__ */__webpack_require__.n(_node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0__);
+      // Imports
+
+      const ___HTML_LOADER_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(/*! ./assets/img/favicon.ico */ './src/assets/img/favicon.ico'), __webpack_require__.b);
       // Module
-      const code = '<!DOCTYPE html>\r\n<html lang="en">\r\n<head>\r\n    <meta charset="UTF-8">\r\n    <meta http-equiv="X-UA-Compatible" content="IE=edge">\r\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\r\n    <title>Virtual keyboard</title>\r\n    <!-- <link href="" rel="icon" type="image/x-icon"> -->\r\n</head>\r\n<body>\r\n</body> \r\n</html>';
+      const ___HTML_LOADER_REPLACEMENT_0___ = _node_modules_html_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_0___default()(___HTML_LOADER_IMPORT_0___);
+      const code = `<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta http-equiv="X-UA-Compatible" content="IE=edge">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Virtual keyboard</title>\n    <link href="${___HTML_LOADER_REPLACEMENT_0___}" rel="icon" type="image/x-icon">\n</head>\n<body>\n</body> \n</html>`;
       // Exports
       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (code);
+      /***/ }),
+
+    /***/ './node_modules/html-loader/dist/runtime/getUrl.js':
+    /*! *********************************************************!*\
+  !*** ./node_modules/html-loader/dist/runtime/getUrl.js ***!
+  \******************************************************** */
+    /***/ ((module) => {
+      module.exports = function (url, options) {
+        if (!options) {
+          // eslint-disable-next-line no-param-reassign
+          options = {};
+        }
+
+        if (!url) {
+          return url;
+        } // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+
+        url = String(url.__esModule ? url.default : url);
+
+        if (options.hash) {
+          // eslint-disable-next-line no-param-reassign
+          url += options.hash;
+        }
+
+        if (options.maybeNeedQuotes && /[\t\n\f\r "'=<>`]/.test(url)) {
+          return '"'.concat(url, '"');
+        }
+
+        return url;
+      };
       /***/ }),
 
     /***/ './node_modules/regenerator-runtime/runtime.js':
@@ -9450,8 +9496,8 @@
                 result.value = unwrapped;
                 resolve(result);
               }, (error) =>
-              // If a rejected Promise was yielded, throw the rejection back
-              // into the async generator function so it can be handled there.
+                // If a rejected Promise was yielded, throw the rejection back
+                // into the async generator function so it can be handled there.
                 invoke('throw', error, resolve, reject));
             }
           }
@@ -10345,6 +10391,14 @@
       module.exports = `${__webpack_require__.p}img/circuit-board.svg`;
       /***/ }),
 
+    /***/ './src/assets/img/favicon.ico':
+    /*! ************************************!*\
+  !*** ./src/assets/img/favicon.ico ***!
+  \*********************************** */
+    /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+      module.exports = `${__webpack_require__.p}img/favicon.ico`;
+      /***/ }),
+
     /***/ './src/assets/fonts/Lato-Regular.ttf':
     /*! *******************************************!*\
   !*** ./src/assets/fonts/Lato-Regular.ttf ***!
@@ -10542,4 +10596,4 @@
   })();
 /** *** */ })();
 
-// # sourceMappingURL=index.877e82f59fdb8c02cc6c.js.map
+// # sourceMappingURL=index.6d6fb78f24a06f98aab6.js.map
