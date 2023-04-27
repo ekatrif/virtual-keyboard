@@ -1,8 +1,8 @@
-# Вертска макета Shelter Rolling Scopes School stage 1.
+# Virtual keyboard task / Rolling Scopes School stage 1.
 
-**Ссылка на deploy**: 
+**Deploy**: https://ekatrif.github.io/virtual-keyboard
 
-**Ссылка на задание**: https://github.com/rolling-scopes-school/tasks/blob/master/tasks/virtual-keyboard/virtual-keyboard-en.md
+**Task**: https://github.com/rolling-scopes-school/tasks/blob/master/tasks/virtual-keyboard/virtual-keyboard-en.md
 
 ## Использованные инструменты:
 
