@@ -179,6 +179,16 @@ const addChar = (key) => {
   textarea.selectionEnd = endPos + 1;
 };
 
+const addTab = () => {
+  const textarea = document.querySelector('.textarea');
+  const endPos = textarea.selectionEnd;
+  const currentValue = textarea.value;
+  textarea.focus();
+  textarea.value = `${currentValue.slice(0, endPos)}\u0009${currentValue.slice(endPos)}`;
+  textarea.selectionStart = endPos + 1;
+  textarea.selectionEnd = endPos + 1;
+};
+
 const capsOn = () => {
   const keys = document.querySelectorAll('.key');
   keys.forEach((key) => {
@@ -262,7 +272,7 @@ const keyDownHandler = (e) => {
           deletePrevChar();
           break;
         case 'Tab':
-          textarea.value += '\u0009';
+          addTab();
           break;
         case 'Delete':
           deleteNextChar();
@@ -371,7 +381,7 @@ const mousedownHandler = (e) => {
         deletePrevChar();
         break;
       case 'Tab':
-        textarea.value += '\u0009';
+        addTab();
         break;
       case 'Delete':
         deleteNextChar();
