@@ -1,4 +1,4 @@
-# Virtual keyboard task / Rolling Scopes School stage 1.
+# Virtual keyboard.
 
 **Deploy**: https://ekatrif.github.io/virtual-keyboard
 
